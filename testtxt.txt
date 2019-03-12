@@ -1,23 +1,46 @@
-favoritos();
 
-fireBase();
 
-orderDistancia();
 
-Layout.
-1.Celda
-2.Foto
-3.DetailActivity
-6.DetailFragment
+
+sql();
+
+
+
 4.Logo
 5.FirstActivity();
+
 
 Redes.
 1.FB
 2.IG
 
-Halt();
+-----------------------Halt();
 
-vamoaver
+
+BestPractice 
+
+
+MillionDollarGame
+
+GuiaAndroid
+
+BillionDollarApp
+
+Anapp:	
+	?Donde puedo conseguir lo que me falta?
+	?Que puedo hacer con lo que tengo?
+	
+
+GPMuevo :
+
+	?Donde hay gente haciendo lo que quiero?
+	?Informacion de lo que quiero??????
+
+
+
+
+
+
+
 
 

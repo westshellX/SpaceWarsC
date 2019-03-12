@@ -6,6 +6,8 @@
 #include <stdio.h>
 
 
+
+
 using namespace std;
 void printScreen(char table[25][80]);
 void playerMove(struct JUGADOR *player, struct PROYECTIL pList[10], char table[20][80]);
@@ -15,7 +17,8 @@ void setScreenBorders(char table[20][80]);
 void obstacleMove(struct OBSTACULO *obs);
 void proyectilMove(struct PROYECTIL *proyectil);
 void refreshTable(struct JUGADOR *player, struct PROYECTIL pList[10], struct ENEMIGO eList[10], struct OBSTACULO oList[10], bool *gameOver, char table[25][80]);
-
+bool menu(char table[25][80], bool* gameOver);
+void clearTable(char table[25][80]);
 
 
 struct JUGADOR {
@@ -47,7 +50,7 @@ struct PROYECTIL {
 	
 	bool visible = false;
 	
-	char s = '>';
+	char s ='*';
 	
 };
 
@@ -75,39 +78,108 @@ main(){
 	
 	struct PROYECTIL pList[10];
 	
-	bool gameOver=false;
+	bool gameOver=false, seJuega=true;
 	
 	char table[25][80]={{" "}};
-	
-	setScreenBorders(table);
-	
-	createObstaculosEnemies(eList, oList);
-	
-	
-	
-	while(!gameOver){
-		
 
-		playerMove(&player, pList, table);
-
-		refreshTable(&player, pList, eList, oList, &gameOver, table);
-		
-		printScreen(table);
-		
-				
-	}
 	
-	cout<<"GAMEOVER";
+
+	
+
+/*
+    if (err)
+    {
+        printf("An error occured: %d", err);
+        return 1;
+    }
+    */
+	
+	
+	while(seJuega){
+		
+		setScreenBorders(table);
+	
+		createObstaculosEnemies(eList, oList);
+		
+		player.x=12;
+		
+		player.y=40;
+		
+	
+		
+		while(!gameOver){
+			
+			
+		/*	thread getUserInputThread{playerMove, &player, pList, table};
+			
+			sleep(200);
+			
+			getUserInputThread.join();*/
+			
+		
+			playerMove(&player, pList, table);
+		
+			refreshTable(&player, pList, eList, oList, &gameOver, table);
+			
+			printScreen(table);
+			
+			
+		}
+		
+		cout<<"GAMEOVER"<<endl;
+		
+		seJuega=menu(table, &gameOver);
+		
+	}	
+	
+}
+
+void gameOver(){
+	
+	
 	
 	
 }
 
+void waiting(){
+	
+	
+	
+}
 
-void refreshTable(struct JUGADOR *player, struct PROYECTIL pList[10], struct ENEMIGO eList[10], struct OBSTACULO oList[10], bool *gameOver, char table[25][80]){
+bool menu(char table[25][80], bool* gameOver){
+	
+	char opcion;
+	
+	
+	do{
+		cout<<"Desea jugar nuevamente?";
+		cin>>opcion;
+		
+		while(cin.fail()){
+			cin.clear();
+			cin.ignore(INT_MAX,'\n');
+			cout<<"Desea jugar nuevamente?";
+			cin>>opcion;
+		}
+		
+	
+	} while (opcion!='n'&&opcion!='s');
+	
+	
+	if(opcion=='s'){
+		
+		*gameOver=false;
+		return true;
+		
+	} else return false;
+	
+
+}
+
+void clearTable(char table[25][80]){
 	
 	int i,z;
-	
-	//table[player->x][player->y]=player->s;
 	
 	for(i=0; i<25; i++){
 		for(z=0; z<80; z++){
@@ -116,6 +188,24 @@ void refreshTable(struct JUGADOR *player, struct PROYECTIL pList[10], struct ENE
 			
 		}
 	}
+	
+}
+
+void refreshTable(struct JUGADOR *player, struct PROYECTIL pList[10], struct ENEMIGO eList[10], struct OBSTACULO oList[10], bool *gameOver, char table[25][80]){
+	
+	int i,z;
+	
+	//table[player->x][player->y]=player->s;
+
+	
+	for(i=0; i<25; i++){
+		for(z=0; z<80; z++){
+			
+			table[i][z]=' ';
+			
+		}
+	}
+	
 	
 	setScreenBorders(table);
 	
@@ -179,7 +269,6 @@ void checkCollision(struct OBSTACULO *oList[10], struct ENEMIGO *eList[10], stru
 	
 }
 
-
 void obstacleMove(struct OBSTACULO *obs){
 	
 	int i;
@@ -218,7 +307,7 @@ void proyectilMove(struct PROYECTIL *proyectil){
 			
 			break;
 			
-		case 4: if(proyectil->y!=78) proyectil->y--;
+		case 4: if(proyectil->y!=79) proyectil->y--;
 				else proyectil->visible=false;
 			
 			break;
@@ -235,7 +324,7 @@ void shotFired(struct JUGADOR *player, struct PROYECTIL pList[10], int d){
 	
 	for(i=0; i<10; i++){
 		
-		if(pList[i].visible=true){
+		if(!pList[i].visible){
 			
 			pList[i].visible=true;			
 			pList[i].x= player->x;
@@ -313,11 +402,11 @@ void playerMove(struct JUGADOR *player, struct PROYECTIL pList[10], char table[2
 	
 }
 
-void setScreenBorders(char table[20][80]){
+void setScreenBorders(char table[25][80]){
 	
 	int i;
 	
-		for(i=1; i<25; i++){
+	for(i=1; i<25; i++){
 		
 		table[i][0]='|';
 		table[i][79]='|';
@@ -327,8 +416,8 @@ void setScreenBorders(char table[20][80]){
 	
 	for(i=1; i<79;i++){
 			
-			table[0][i]='_';
-			table[24][i]='_';
+		table[0][i]='_';
+		table[24][i]='_';
 			
 	}
 	
@@ -342,8 +431,7 @@ void printScreen(char table[25][80]){
 	
 	system("cls");
 	
-
-		
+	
 	for(i=0; i<25; i++){
 		for(z=0; z<80; z++){
 			
