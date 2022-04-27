@@ -4,12 +4,12 @@
 #include <windows.h>
 #include <conio.h>
 #include <stdio.h>
-
+#include <iomanip>
 
 
 
 using namespace std;
-void printScreen(char table[25][80]);
+void printScreen(char table[25][80],unsigned int x=0,unsigned int y=0,bool showNum=false);
 void playerMove(struct JUGADOR *player, struct PROYECTIL pList[10], char table[20][80]);
 void shotFired(struct JUGADOR *player, struct PROYECTIL pList[10], int d);
 void createObstaculosEnemies(struct ENEMIGO eList[10], struct OBSTACULO oList[10]);
@@ -44,6 +44,7 @@ struct ENEMIGO {
 	
 };
 
+//Œ˜∞‡—¿”Ô£∫…‰µØ
 struct PROYECTIL {
 	
 	int x,y, dir;
@@ -67,8 +68,7 @@ struct OBSTACULO {
 };
 
 
-
-main(){
+void main(){
 	
 	struct JUGADOR player;
 	
@@ -80,6 +80,7 @@ main(){
 	
 	bool gameOver=false, seJuega=true;
 	
+	unsigned int tableX = 10, tableY = 10;
 	char table[25][80]={{" "}};
 
 	
@@ -121,7 +122,7 @@ main(){
 		
 			refreshTable(&player, pList, eList, oList, &gameOver, table);
 			
-			printScreen(table);
+			printScreen(table,tableX,tableY,true);
 			
 			
 		}
@@ -153,6 +154,7 @@ bool menu(char table[25][80], bool* gameOver){
 	
 	
 	do{
+		//Œ˜∞‡—¿”Ô£∫"‘ŸÕÊ“ª¥Œ£ø"
 		cout<<"Desea jugar nuevamente?";
 		cin>>opcion;
 		
@@ -424,15 +426,33 @@ void setScreenBorders(char table[25][80]){
 	
 }
 
-void printScreen(char table[25][80]){
+void printScreen(char table[25][80],unsigned int x,unsigned int y,bool showNum){
 	
 	
 	int i, z;
 	
 	system("cls");
-	
-	
+
+	for (unsigned int rowIndex = 0; rowIndex < y - 1; ++rowIndex)
+		std::cout << std::endl;
+	for (unsigned int colIndex = 0; colIndex < x; ++colIndex)
+		std::cout << ' ';
+	if (showNum)
+	{
+		for (unsigned int colIndex = 0; showNum && colIndex < 80; ++colIndex)
+			std::cout << 'c';
+	}
+	std::cout << std::endl;
+
 	for(i=0; i<25; i++){
+		for (unsigned int colIndex = 0; colIndex < x; ++colIndex)
+		{
+			if (showNum&&x >= 1 && colIndex == x - 1)
+				std::cout << std::setw(2)<<i;
+			else
+				std::cout << ' ';
+		}
+
 		for(z=0; z<80; z++){
 			
 			cout<<table[i][z];
